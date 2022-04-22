@@ -8,6 +8,11 @@ import { graphql } from "gatsby"
 import Layout from "../components/ui/layout"
 import DynamicToolbar from "../components/product-list/DynamicToolbar"
 import ListOfProducts from "../components/product-list/ListOfProducts"
+import {
+  alphabetic,
+  time,
+  price,
+} from "../components/product-list/SortFunctions"
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -51,6 +56,16 @@ export default function ProductList({
   const [layout, setLayout] = useState("grid")
   const [page, setPage] = useState(1)
   const [filterOptions, setFilterOptions] = useState(options)
+  const [sortOptions, setSortOptions] = useState([
+    { label: "A-Z", active: true, function: data => alphabetic(data, "asc") },
+    { label: "Z-A", active: false, function: data => alphabetic(data, "desc") },
+    { label: "NEWEST", active: false, function: data => time(data, "asc") },
+    { label: "OLDEST", active: false, function: data => time(data, "desc") },
+    { label: "PRICE ↑", active: false, function: data => price(data, "asc") },
+    { label: "PRICE ↓", active: false, function: data => price(data, "desc") },
+    { label: "REVIEWS", active: false, function: data => data },
+  ])
+
   const scrollRef = useRef(null)
 
   const scroll = () => {
@@ -64,7 +79,10 @@ export default function ProductList({
   const productsPerPage = layout === "grid" ? 16 : 6
 
   var content = []
-  products.map((product, i) =>
+  const selectedSort = sortOptions.filter(option => option.active)[0]
+  const sortedProducts = selectedSort.function(products)
+
+  sortedProducts.map((product, i) =>
     product.node.variants.map(variant => content.push({ product: i, variant }))
   )
 
@@ -137,6 +155,8 @@ export default function ProductList({
         <DynamicToolbar
           filterOptions={filterOptions}
           setFilterOptions={setFilterOptions}
+          sortOptions={sortOptions}
+          setSortOptions={setSortOptions}
           name={name}
           description={description}
           layout={layout}
@@ -171,6 +191,7 @@ export const query = graphql`
       edges {
         node {
           strapiId
+          created_at
           name
           category {
             name
