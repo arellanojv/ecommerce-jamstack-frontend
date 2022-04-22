@@ -1,14 +1,14 @@
-import { createTheme } from "@material-ui/core/styles"
+import { createMuiTheme } from "@material-ui/core/styles"
 
 const green = "#99B898"
 const darkGreen = "#708670"
 const tan = "#FECEA8"
-const lightRed = "FF847C"
+const lightRed = "#FF847C"
 const red = "#E84A5F"
 const offBlack = "#2A363B"
 const grey = "#747474"
 
-const theme = createTheme({
+const theme = createMuiTheme({
   palette: {
     primary: {
       main: green,
@@ -25,8 +25,8 @@ const theme = createTheme({
   },
   typography: {
     h1: {
-      fontFamily: "Philosopher",
       fontSize: "4.5rem",
+      fontFamily: "Philosopher",
       fontStyle: "italic",
       fontWeight: 700,
       color: green,
@@ -35,7 +35,7 @@ const theme = createTheme({
       fontFamily: "Montserrat",
       fontSize: "3rem",
       fontWeight: 500,
-      color: "#FFF",
+      color: "#fff",
     },
     h3: {
       fontFamily: "Montserrat",
@@ -45,28 +45,22 @@ const theme = createTheme({
     },
     h4: {
       fontFamily: "Philosopher",
-      fontSize: "3rem",
       fontStyle: "italic",
       fontWeight: 700,
-      color: "#FFF",
+      fontSize: "3rem",
+      color: "#fff",
     },
     h5: {
       fontFamily: "Philosopher",
       fontSize: "2rem",
-      fontStyle: "italic",
       fontWeight: 700,
-      color: "#FFF",
+      fontStyle: "italic",
+      color: "#fff",
     },
-    h6: {},
     body1: {
       fontFamily: "Montserrat",
       fontSize: "1.5rem",
       color: grey,
-    },
-    body2: {
-      fontFamily: "Montserrat",
-      fontSize: "1.5rem",
-      color: "#fff",
     },
   },
   overrides: {
@@ -78,7 +72,7 @@ const theme = createTheme({
         fontFamily: "Montserrat",
         fontSize: "1.5rem",
         color: "#fff",
-        fontWeight: 400,
+        fontWeight: 500,
       },
     },
   },

@@ -5,11 +5,21 @@
  * See: https://www.gatsbyjs.com/docs/use-static-query/
  */
 
-import * as React from "react"
+import React from "react"
 import { useStaticQuery, graphql } from "gatsby"
+import { makeStyles } from "@material-ui/core/styles"
 
 import Header from "./header"
 import Footer from "./footer"
+
+const useStyles = makeStyles(theme => ({
+  spacer: {
+    marginBottom: "5rem",
+    [theme.breakpoints.down("md")]: {
+      marginBottom: "2rem",
+    },
+  },
+}))
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
