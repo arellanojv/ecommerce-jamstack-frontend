@@ -1,3 +1,10 @@
+/**
+ * Implement Gatsby's Node APIs in this file.
+ *
+ * See: https://www.gatsbyjs.org/docs/node-apis/
+ */
+
+// You can delete this file if you're not using it
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
 
@@ -9,8 +16,19 @@ exports.createPages = async ({ graphql, actions }) => {
             node {
               name
               strapiId
+              description
               category {
                 name
+              }
+              variants {
+                id
+                color
+                size
+                style
+                price
+                images {
+                  url
+                }
               }
             }
           }
@@ -59,6 +77,8 @@ exports.createPages = async ({ graphql, actions }) => {
         name: product.node.name,
         id: product.node.strapiId,
         category: product.node.category.name,
+        description: product.node.description,
+        variants: product.node.variants,
       },
     })
   })
@@ -76,13 +96,3 @@ exports.createPages = async ({ graphql, actions }) => {
     })
   })
 }
-
-// exports.createPages = async ({ actions }) => {
-//   const { createPage } = actions
-//   createPage({
-//     path: "/using-dsg",
-//     component: require.resolve("./src/templates/using-dsg.js"),
-//     context: {},
-//     defer: true,
-//   })
-// }
