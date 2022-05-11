@@ -97,15 +97,37 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+export const getStockDisplay = (stock, variant) => {
+  switch (stock) {
+    case undefined:
+    case null:
+      return "Loading Inventory..."
+      break
+    case -1:
+      return "Error Loading Inventory"
+      break
+    default:
+      if (stock[variant].qty === 0) {
+        return "Out of Stock"
+      } else {
+        return `${stock[variant].qty} Currently In Stock`
+      }
+      break
+  }
+}
+
 export default function ProductInfo({
   name,
   description,
   variants,
   selectedVariant,
   setSelectedVariant,
+  stock,
 }) {
   const classes = useStyles()
-  const [selectedSize, setSelectedSize] = useState(null)
+  const [selectedSize, setSelectedSize] = useState(
+    variants[selectedVariant].size
+  )
   const [selectedColor, setSelectedColor] = useState(null)
 
   const matchesXS = useMediaQuery(theme => theme.breakpoints.down("xs"))
@@ -121,16 +143,35 @@ export default function ProductInfo({
   variants.map(variant => {
     sizes.push(variant.size)
 
-    if (!colors.includes(variant.color)) {
+    if (
+      !colors.includes(variant.color) &&
+      variant.size === selectedSize &&
+      variant.style === variants[selectedVariant].style
+    ) {
       colors.push(variant.color)
     }
   })
+
+  useEffect(() => {
+    setSelectedColor(null)
+
+    const newVariant = variants.find(
+      variant =>
+        variant.size === selectedSize &&
+        variant.style === variants[selectedVariant].style &&
+        variant.color === colors[0]
+    )
+
+    setSelectedVariant(variants.indexOf(newVariant))
+  }, [selectedSize])
 
   useEffect(() => {
     if (imageIndex !== -1) {
       setSelectedVariant(imageIndex)
     }
   }, [imageIndex])
+
+  const stockDisplay = getStockDisplay(stock, selectedVariant)
 
   return (
     <Grid
@@ -244,13 +285,13 @@ export default function ProductInfo({
               </Grid>
               <Grid item>
                 <Typography variant="h3" classes={{ root: classes.stock }}>
-                  12 Currently In Stock
+                  {stockDisplay}
                 </Typography>
               </Grid>
             </Grid>
           </Grid>
           <Grid item>
-            <QtyButton />
+            <QtyButton stock={stock} selectedVariant={selectedVariant} />
           </Grid>
         </Grid>
       </Grid>
